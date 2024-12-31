@@ -14,6 +14,6 @@
     q_stgpool: "{{ sp_server_facts_flags.q_stgpool }}"
   register: sp_server_facts
 
-- name: "Display Storage Protect Server Facts"
+- name: "Displaying Storage Protect Server Facts"
   debug:
     var: sp_server_facts

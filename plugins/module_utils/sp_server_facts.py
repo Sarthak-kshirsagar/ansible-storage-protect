@@ -5,7 +5,7 @@ from ..module_utils.dsmadmc_adapter import DsmadmcAdapter
 
 class DsmadmcAdapterExtended(DsmadmcAdapter):
     """
-    Extended DsmadmcAdapter to add support for the -commadelimited parameter.
+    Extended DsmadmcAdapter to add support for the -commadelimited parameter
     """
 
     def run_command(self, command, auto_exit=True, dataonly=True, exit_on_fail=True):

@@ -68,7 +68,7 @@ options:
         default: False
     q_stgpool:
         description:
-            - Whether to gather storage pool information from the server.
+            - Whether to gather storage pool information from the server
         type: bool
         default: False
 extends_documentation_fragment: ibm.storage_protect.auth

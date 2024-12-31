@@ -6,7 +6,7 @@ This Ansible role is designed to retrieve the facts of a Storage Protect Server 
 
 - Ansible 2.9+ (to use the required features).
 - The `sp_server_facts` module must be installed and accessible.
-- Access to a running Storage Protect Server (SP) with appropriate credentials.
+- Access to a running Storage Protect Server (SP) with appropriate credentials
 
 ## Environment Variables
 

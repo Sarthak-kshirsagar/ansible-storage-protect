@@ -215,6 +215,7 @@ def main():
                 "Failed to define path"
             ),
         ]
+        # logic to check whether the storage agent, copygroup and path is already defined or not , to make module idempotent
         for cmd, err_msg in server_commands:
             outputs.append(execute_command(module, cmd, dsmadmc_adapter))
         changed = True

@@ -5,6 +5,8 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from ansible.module_utils.basic import AnsibleModule
+from pygments.lexer import default
+
 from ..module_utils.dsmadmc_adapter import DsmadmcAdapter
 from ..module_utils.dsmc_adapter import DsmcAdapter
 
@@ -178,8 +180,9 @@ def main():
         agent_lanfree_tcp_port=dict(type='str', required=True),
         # Node for LAN-free validation; default if not provided
         node_name=dict(type='str', required=False, default="lanfree1"),
-        config_role=dict(type='str', required=True, choices=['server', 'client']),
-        client_options_file_path = dict(type='str', required=True, default="/opt/tivoli/tsm/client/ba/bin/dsm.sys")
+        config_role=dict(type='str', required=False, choices=['server', 'client']),
+        client_options_file_path = dict(type='str', required=True, default="/opt/tivoli/tsm/client/ba/bin/dsm.sys"),
+        validate_lan_free = dict(type=bool, required = False, default=False),
     )
 
     module = AnsibleModule(argument_spec=module_args)
@@ -191,6 +194,17 @@ def main():
 
 
     outputs = []
+    if 'config_role' not in params and not params['validate_lan_free']:
+        module.fail_json(msg='Config role should be provided or validate lan free should be True')
+
+    if 'config_role' not in params and params['validate_lan_free']:
+        if params['stg_agent_name']!='':
+            command = f"validate lanfree {params['node_name']} {params['stg_agent_name']}"
+            std_out = execute_command(module=module,cmd=command,adapter=dsmadmc_adapter)
+            outputs.append(std_out)
+            changed=True
+        else:
+            module.fail_json(msg="Storage agent name should be provided")
 
     if params['config_role'] == 'server':
         # List of (command, error message) tuples for server configuration

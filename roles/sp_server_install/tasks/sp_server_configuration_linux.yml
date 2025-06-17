@@ -82,6 +82,16 @@
             - tcpnodelay yes
             - commmethod sharedmem
             - shmport 1510
+            - ACTIVELOGSIZE "{{ act_log_size }}"
+            - COMMTIMEOUT 3600
+            - DEDUPREQUIRESBACKUP NO
+            - DEVCONFIG devconf.dat
+            - EXPINTERVAL 0
+            - IDLETIMEOUT 60
+            - MAXSESSIONS "{{ max_sessions }}"
+            - NUMOPENVOLSALLOWED 20
+            - TCPWINDOWSIZE 0
+            - VOLUMEHISTORY volhist.out
 
         - name: Setting DB2 registry variable
           ansible.builtin.shell:
@@ -164,7 +174,6 @@
             state: touch
           when: not admin_user_setup.stat.exists
 
-
         - name: Ensure DB2 environment initialization in .profile
           ansible.builtin.lineinfile:
             path: /home/{{ tsm_user }}/.profile
@@ -240,6 +249,7 @@
         - "tcpport 1500"
         - "errorlogname {{ root_dir }}/{{ tsm_user }}/tsmdbmgr.log"
         - "nodename $$_TSMDBMGR_$$"
+        - "passworddir {{ root_dir }}/{{ tsm_user }}/tsminst1"
 
     - name: Configure server database maintenance options
       ansible.builtin.lineinfile:
@@ -248,8 +258,9 @@
         state: present
       loop:
         - "allowreorgindex yes"
-        - "reorgbegintime 20:30"
-        - "reorgduration 4"
+        - "REORGBEGINTIME 12:00"
+        - "REORGDURATION 6"
+        - "ALLOWREORGTABLE yes"
 
     - name: Server Configuration Status
       debug:
